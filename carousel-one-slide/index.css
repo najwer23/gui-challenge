@@ -1,0 +1,112 @@
+body {
+			background: grey;
+		}
+
+		.carousel-container {
+			position: relative;
+			display: flex;
+			width: 900px;
+			height: 500px;
+			overflow: hidden;
+			background-color: rgba(0, 0, 0, 0.5);
+			border-radius: 10px;
+		}
+
+		.carousel-content {
+			display: flex;
+			transform: scale(1);
+			transition: transform .5s cubic-bezier(.25, .46, .45, .94)
+		}
+
+		.carousel-content img {
+			width: 900px;
+			height: 500px;
+		}
+
+		.carousel-arrow {
+			width: 100px;
+			background-color: rgba(0, 0, 0, 0);
+			position: absolute;
+			height: 100%;
+			z-index: 2;
+			color: black;
+			border: none;
+			font-size: 50px;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			align-content: space-around;
+
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-khtml-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+
+		.arrow-n-right {
+			transform: rotate(45deg);
+			width: 40px;
+			height: 40px;
+			border-right: solid 2px black;
+			border-top: solid 2px black;
+		}
+
+		.arrow-n-left {
+			transform: rotate(225deg);
+			width: 40px;
+			height: 40px;
+			border-right: solid 2px black;
+			border-top: solid 2px black;
+		}
+
+		.carousel-arrow.left {
+			left: 0;
+			border-top-left-radius: 10px;
+			border-bottom-left-radius: 10px;
+		}
+
+		.carousel-arrow.right {
+			right: 0;
+			border-top-right-radius: 10px;
+			border-bottom-right-radius: 10px;
+		}
+
+		.carousel-item {
+			cursor: pointer;
+		}
+
+		.carousel-progress-bar {
+			display: flex;
+			margin-top: 10px;
+		}
+
+		.carousel-progress-bar-item {
+			width: 30px;
+			height: 15px;
+			margin-right: 5px;
+			background-color: blanchedalmond;
+			border-radius: 10px;
+			cursor: pointer;
+		}
+
+		.carousel-progress-bar-item.active {
+			background-color: goldenrod;
+		}
+
+		div.carousel-progress-bar-item:last-of-type {
+			margin-right: 0;
+		}
+
+
+		@media only screen and (max-width: 600px) {
+			.carousel-container {
+				width: 90%
+			}
+
+			.carousel-arrow {
+				display: none;
+			}
+		}
