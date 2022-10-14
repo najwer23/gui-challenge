@@ -1,14 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     var carouselDataIn = {
-			"#carousel1": {
-				isMousedownActive: false,
-				isMousemoveActive: false,
-				translationX: 0,
-				mouseStartX: 0,
-				children: null,
-				oneLenghtOfSlider: 0,
-				oneFrame: 0,
-			},
+			"#carousel1": {},
+			"#carousel2": {}
 		};
 
 		initCarousel();
@@ -17,17 +10,32 @@ document.addEventListener("DOMContentLoaded", () => {
 			let carouselDataInKeys = Object.keys(carouselDataIn);
 
 			for (let i = 0; i < carouselDataInKeys.length; i++) {
+
+				carouselDataIn[carouselDataInKeys[i]] = {
+					...carouselDataIn[carouselDataInKeys[i]],
+					...{
+						isMousedownActive: false,
+						isMousemoveActive: false,
+						translationX: 0,
+						mouseStartX: 0,
+						oneLenghtOfSlider: 0,
+						oneFrame: 0,
+					}
+				}
+
 				if (document.querySelector(carouselDataInKeys[i])) {
 					calculateWidthForCarousel(carouselDataInKeys[i]);
 					calculateProgressBar(carouselDataInKeys[i]);
 					addMouseEventsToSlider(carouselDataInKeys[i]);
 				}
 			}
+
+			console.log(carouselDataIn);
 		}
 
-		function calculateProgressBar(nameOfElement) {
-			let progressBarContainer = document.querySelector( nameOfElement + "-progress-bar");
-			let numberOfRectangles = Math.ceil(carouselDataIn[nameOfElement].oneLenghtOfSlider / carouselDataIn[nameOfElement].oneFrame);
+		function calculateProgressBar(elementName) {
+			let progressBarContainer = document.querySelector( elementName + "-progress-bar");
+			let numberOfRectangles = Math.ceil(carouselDataIn[elementName].oneLenghtOfSlider / carouselDataIn[elementName].oneFrame);
 			let div;
 
 			progressBarContainer.innerHTML = "";
@@ -44,9 +52,9 @@ document.addEventListener("DOMContentLoaded", () => {
 			}
 
 			function translationForProgressBar(id) {
-				let translation =(-carouselDataIn[nameOfElement].oneFrame * id) % carouselDataIn[nameOfElement].oneLenghtOfSlider;
-				document.querySelector(nameOfElement).style.transform = "translateX(" + translation + "px)";
-				carouselDataIn[nameOfElement].translationX = translation;
+				let translation =(-carouselDataIn[elementName].oneFrame * id) % carouselDataIn[elementName].oneLenghtOfSlider;
+				document.querySelector(elementName).style.transform = "translateX(" + translation + "px)";
+				carouselDataIn[elementName].translationX = translation;
 			}
 
 			progressBarContainer.addEventListener("click", function (e) {
@@ -66,19 +74,19 @@ document.addEventListener("DOMContentLoaded", () => {
 			}
 		}
 
-		function calculateWidthForCarousel(nameOfElement) {
-			let carousel = document.querySelector(nameOfElement);
-			carouselDataIn[nameOfElement].oneFrame = carousel.parentElement.offsetWidth;
-			carouselDataIn[nameOfElement].oneLenghtOfSlider = 0;
-			document.querySelectorAll(".carousel-item img").forEach((x) => {
-				x.style.width = carouselDataIn[nameOfElement].oneFrame + "px";
-				carouselDataIn[nameOfElement].oneLenghtOfSlider += carouselDataIn[nameOfElement].oneFrame;
+		function calculateWidthForCarousel(elementName) {
+			let carousel = document.querySelector(elementName);
+			carouselDataIn[elementName].oneFrame = carousel.parentElement.offsetWidth;
+			carouselDataIn[elementName].oneLenghtOfSlider = 0;
+			document.querySelectorAll(elementName + " .carousel-item img").forEach((x) => {
+				x.style.width = carouselDataIn[elementName].oneFrame + "px";
+				carouselDataIn[elementName].oneLenghtOfSlider += carouselDataIn[elementName].oneFrame;
 			});
 		}
 
-		function addMouseEventsToSlider(nameOfElement) {
-			const carousel = document.querySelector(nameOfElement);
-			const carouselContainer = document.querySelector(".carousel-container");
+		function addMouseEventsToSlider(elementName) {
+			const carousel = document.querySelector(elementName);
+			const carouselContainer = carousel.parentNode;
 
 			carouselContainer.addEventListener("click", function (e) {
 				if (e.target.closest(".carousel-arrow.right")) {
@@ -90,21 +98,21 @@ document.addEventListener("DOMContentLoaded", () => {
 			});
 
 			function prevPicture() {
-					let translation = (-(carouselDataIn[nameOfElement].oneLenghtOfSlider - carouselDataIn[nameOfElement].oneFrame) + carouselDataIn[nameOfElement].translationX) % carouselDataIn[nameOfElement].oneLenghtOfSlider;
+					let translation = (-(carouselDataIn[elementName].oneLenghtOfSlider - carouselDataIn[elementName].oneFrame) + carouselDataIn[elementName].translationX) % carouselDataIn[elementName].oneLenghtOfSlider;
 					carousel.style.transform = "translateX(" + translation + "px)";
-					carouselDataIn[nameOfElement].translationX = translation;
+					carouselDataIn[elementName].translationX = translation;
 					addClassActiveToProgressBar();
 			}
 
 			function nextPicture() {
-				let translation = (-carouselDataIn[nameOfElement].oneFrame + carouselDataIn[nameOfElement].translationX) % carouselDataIn[nameOfElement].oneLenghtOfSlider;
+				let translation = (-carouselDataIn[elementName].oneFrame + carouselDataIn[elementName].translationX) % carouselDataIn[elementName].oneLenghtOfSlider;
 				carousel.style.transform = "translateX(" + translation + "px)";
-				carouselDataIn[nameOfElement].translationX = translation;
+				carouselDataIn[elementName].translationX = translation;
 				addClassActiveToProgressBar();
 			}
 
 			function addClassActiveToProgressBar() {
-				let choosenframe = Math.floor(Math.abs( carouselDataIn[nameOfElement].translationX / carouselDataIn[nameOfElement].oneFrame) % (carouselDataIn[nameOfElement].oneLenghtOfSlider / carouselDataIn[nameOfElement].oneFrame));
+				let choosenframe = Math.floor(Math.abs( carouselDataIn[elementName].translationX / carouselDataIn[elementName].oneFrame) % (carouselDataIn[elementName].oneLenghtOfSlider / carouselDataIn[elementName].oneFrame));
 				removeActiveClassFromChildren(".carousel-progress-bar-item.active");
 				document.querySelector("#carousel-progress-bar-item-" + choosenframe).classList.add("active");
 			}
@@ -115,8 +123,8 @@ document.addEventListener("DOMContentLoaded", () => {
 			});
 
 			window.addEventListener("resize", function (event) {
-				calculateWidthForCarousel(nameOfElement);
-				calculateProgressBar(nameOfElement);
+				calculateWidthForCarousel(elementName);
+				calculateProgressBar(elementName);
 			});
 
 			var THRESHOLD = 15;
@@ -174,8 +182,9 @@ document.addEventListener("DOMContentLoaded", () => {
 						//console.log("down")
 					}
 				} else {
-					if (element.id == f1.id) {
+					if (element.id == "carousel1") {
 						//if click
+						console.log(1)
 					}
 				}
 			}
