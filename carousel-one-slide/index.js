@@ -87,6 +87,8 @@ document.addEventListener("DOMContentLoaded", () => {
 			const carousel = document.querySelector(elementName);
 			const carouselContainer = carousel.parentNode;
 
+			//setInterval(nextPicture, 5000);
+
 			carouselContainer.addEventListener("click", function (e) {
 				if (e.target.closest(".carousel-arrow.right")) {
 					nextPicture();
