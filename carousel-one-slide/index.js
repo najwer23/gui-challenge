@@ -29,12 +29,11 @@ document.addEventListener("DOMContentLoaded", () => {
 					addMouseEventsToSlider(carouselDataInKeys[i]);
 				}
 			}
-
-			console.log(carouselDataIn);
 		}
 
 		function calculateProgressBar(elementName) {
-			let progressBarContainer = document.querySelector( elementName + "-progress-bar");
+			let carousel = document.querySelector(elementName)
+			let progressBarContainer = carousel.parentNode.parentNode.querySelector(".carousel-progress-bar");
 			let numberOfRectangles = Math.ceil(carouselDataIn[elementName].oneLenghtOfSlider / carouselDataIn[elementName].oneFrame);
 			let div;
 
@@ -61,14 +60,14 @@ document.addEventListener("DOMContentLoaded", () => {
 				if (e.target.matches(".carousel-progress-bar-item")) {
 					let id = e.target.id.match(/\d+/)[0];
 					translationForProgressBar(id);
-					removeActiveClassFromChildren(".carousel-progress-bar-item.active");
+					removeActiveClassFromChildren(this,".carousel-progress-bar-item.active");
 					e.target.classList.add("active");
 				}
 			});
 		}
 
-		function removeActiveClassFromChildren(name) {
-			let itemsWithActiveClass = document.querySelectorAll(name);
+		function removeActiveClassFromChildren(container, name) {
+			let itemsWithActiveClass = container.querySelectorAll(name);
 			for (let i = 0; i < itemsWithActiveClass.length; i++) {
 				itemsWithActiveClass[i].classList.remove("active");
 			}
@@ -113,8 +112,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 			function addClassActiveToProgressBar() {
 				let choosenframe = Math.floor(Math.abs( carouselDataIn[elementName].translationX / carouselDataIn[elementName].oneFrame) % (carouselDataIn[elementName].oneLenghtOfSlider / carouselDataIn[elementName].oneFrame));
-				removeActiveClassFromChildren(".carousel-progress-bar-item.active");
-				document.querySelector("#carousel-progress-bar-item-" + choosenframe).classList.add("active");
+				removeActiveClassFromChildren(document.querySelector(elementName).parentNode.parentNode, ".carousel-progress-bar-item.active");
+				document.querySelector(elementName).parentNode.parentNode.querySelector("#carousel-progress-bar-item-" + choosenframe).classList.add("active");
 			}
 
 			//firefox bug fix
@@ -137,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
 					50 < new Date().getTime() - recordedTime && ((x = parseInt(e.changedTouches[0].pageX, 10)),
 					(y = parseInt(e.changedTouches[0].pageY, 10)),
 					(recordedTime = new Date().getTime()));
-				});
+				}, { passive: true});
 
 				element.addEventListener("touchend", function (e) {
 					x1 = x;
