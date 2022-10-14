@@ -97,10 +97,10 @@ document.addEventListener("DOMContentLoaded", () => {
 			});
 
 			function prevPicture() {
-					let translation = (-(carouselDataIn[elementName].oneLenghtOfSlider - carouselDataIn[elementName].oneFrame) + carouselDataIn[elementName].translationX) % carouselDataIn[elementName].oneLenghtOfSlider;
-					carousel.style.transform = "translateX(" + translation + "px)";
-					carouselDataIn[elementName].translationX = translation;
-					addClassActiveToProgressBar();
+				let translation = (-(carouselDataIn[elementName].oneLenghtOfSlider - carouselDataIn[elementName].oneFrame) + carouselDataIn[elementName].translationX) % carouselDataIn[elementName].oneLenghtOfSlider;
+				carousel.style.transform = "translateX(" + translation + "px)";
+				carouselDataIn[elementName].translationX = translation;
+				addClassActiveToProgressBar();
 			}
 
 			function nextPicture() {
