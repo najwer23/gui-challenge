@@ -185,18 +185,18 @@ document.addEventListener("DOMContentLoaded", () => {
 				stateArrows();
 			});
 
-			addListenerMulti(carousel, 'mousedown touchstart', function (e) {
+			addListenerMulti(carousel, 'mousedown', function (e) {
 				carouselDataIn[elementName].isMousedownActive = true;
 				carouselDataIn[elementName].isMousemoveActive = false;
 				carouselDataIn[elementName].mouseStartX = pointerEventToXY(e).x;
 				carousel.style.transition = "none";
 			});
 
-			addListenerMulti(carousel, 'mouseleave touchcancel', function (e) {
+			addListenerMulti(carousel, 'mouseleave', function (e) {
 				carouselDataIn[elementName].isMousedownActive = false;
 			});
 
-			addListenerMulti(carousel, 'mouseup touchend', function (e) {
+			addListenerMulti(carousel, 'mouseup', function (e) {
 				carouselDataIn[elementName].isMousedownActive = false;
 
 				if (carouselDataIn[elementName].isMousemoveActive) {
@@ -208,7 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				carouselDataIn[elementName].isMousemoveActive = false;
 			});
 
-			addListenerMulti(carousel, 'mousemove touchmove', function (e) {
+			addListenerMulti(carousel, 'mousemove', function (e) {
 				if (!carouselDataIn[elementName].isMousedownActive) {
 					carouselDataIn[elementName].isMousemoveActive = false;
 					carousel.removeEventListener("click", preventClickOnDrag);
