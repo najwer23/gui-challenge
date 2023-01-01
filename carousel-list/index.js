@@ -39,6 +39,10 @@ document.addEventListener("DOMContentLoaded", () => {
 				x.style.width = carouselDataIn[elementName].oneFrame + "px";
 				carouselDataIn[elementName].oneLenghtOfSlider += carouselDataIn[elementName].oneFrame;
 			});
+
+			// init with start position
+			carousel.style.transform = "translateX(" + 0 + "px)";
+			carouselDataIn[elementName].translationX = 0;
 		}
 
 		function addMouseEventsToSlider(elementName) {
@@ -109,6 +113,9 @@ document.addEventListener("DOMContentLoaded", () => {
 			window.addEventListener("resize", function (event) {
 				calculateWidthForCarousel(elementName);
 			});
+
+
+
 
 			var THRESHOLD = 15;
 			var x = (y = x1 = y1 = 0);
