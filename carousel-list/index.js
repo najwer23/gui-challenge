@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				return coordinates;
 			};
 
-			carouselContainer.addEventListener("mousewheel", function (e) {
+			carouselContainer.addEventListener("wheel", function (e) {
 				if (!detectIfTranslationIsPossible()) {
 					return;
 				}
