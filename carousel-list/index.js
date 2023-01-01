@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
 			let carouselDataInKeys = Object.keys(carouselDataIn);
 
 			for (let i = 0; i < carouselDataInKeys.length; i++) {
-
 				carouselDataIn[carouselDataInKeys[i]] = {
 					...carouselDataIn[carouselDataInKeys[i]],
 					...{
@@ -21,6 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
 						oneLenghtOfSlider: 0,
 						oneFrame: 300, // width child
 						oneFrameDisplayed: 0,
+						boundLeft: false,
+						boundRight: false
 					},
 				};
 
@@ -46,6 +47,23 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 
 		function addMouseEventsToSlider(elementName) {
+			const preventClickOnDrag = (e) => {
+				e.preventDefault();
+				e.stopImmediatePropagation();
+			};
+
+			const pointerEventToXY = function (e) {
+				var coordinates = { x: 0, y: 0 };
+				if (e.type.includes("touch")) {
+					coordinates.x = e.changedTouches[0].pageX;
+					coordinates.y = e.changedTouches[0].pageY;
+				} else if (e.type.includes("mouse")) {
+					coordinates.x = e.pageX;
+					coordinates.y = e.pageY;
+				}
+				return coordinates;
+			};
+
 			const carousel = document.querySelector(elementName);
 			const carouselContainer = carousel.parentNode;
 
@@ -58,12 +76,25 @@ document.addEventListener("DOMContentLoaded", () => {
 				}
 			});
 
+			carousel.addEventListener("scroll", function (e) {
+				console.log(12);
+			});
+
+			function stateArrows() {
+				let AL = carouselContainer.querySelector(".carousel-arrow.left")
+				let AR = carouselContainer.querySelector(".carousel-arrow.right")
+
+				AL.style.display = carouselDataIn[elementName].boundLeft ? "none" : "block"
+				AR.style.display = carouselDataIn[elementName].boundRight ? "none" : "block"
+			}
+
 			function prevPicture() {
-				let a = carouselDataIn[elementName].oneLenghtOfSlider;
 				let b = carouselDataIn[elementName].oneFrameDisplayed;
 				let c = carouselDataIn[elementName].translationX;
 				let d = carouselDataIn[elementName].oneFrame;
 				let t = 0;
+				carouselDataIn[elementName].boundLeft = false;
+				carouselDataIn[elementName].boundRight = false;
 
 				// translation left
 				t = c + b;
@@ -72,13 +103,15 @@ document.addEventListener("DOMContentLoaded", () => {
 				let h = b % d;
 				t = t - h;
 
-				// if the translation is bigger than the start, move it to the beginning
-				if (t > 0) {
+				// left bound
+				if (t >= 0) {
 					t = 0;
+					carouselDataIn[elementName].boundLeft = true;
 				}
 
 				carousel.style.transform = "translateX(" + t + "px)";
 				carouselDataIn[elementName].translationX = t;
+				stateArrows()
 			}
 
 			function nextPicture() {
@@ -87,6 +120,8 @@ document.addEventListener("DOMContentLoaded", () => {
 				let c = carouselDataIn[elementName].translationX;
 				let d = carouselDataIn[elementName].oneFrame;
 				let t = 0;
+				carouselDataIn[elementName].boundRight = false;
+				carouselDataIn[elementName].boundLeft = false;
 
 				// translation right
 				t = c - b;
@@ -95,13 +130,15 @@ document.addEventListener("DOMContentLoaded", () => {
 				let h = b % d;
 				t = t + h;
 
-				// check if the move is possible. move up to the last object
-				if (-b + c < -a + b) {
+				// right bound
+				if ( t < -a + b) {
 					t = -a + b;
+					carouselDataIn[elementName].boundRight = true;
 				}
 
 				carousel.style.transform = "translateX(" + t + "px)";
 				carouselDataIn[elementName].translationX = t;
+				stateArrows()
 			}
 
 			//firefox bug fix
@@ -111,6 +148,76 @@ document.addEventListener("DOMContentLoaded", () => {
 
 			window.addEventListener("resize", function (event) {
 				calculateWidthForCarousel(elementName);
+			});
+
+			function addListenerMulti(el, s, fn) {
+				s.split(" ").forEach((e) => el.addEventListener(e, fn, false));
+			}
+
+			addListenerMulti(carousel, 'mousedown touchstart', function (e) {
+				carouselDataIn[elementName].isMousedownActive = true;
+				carouselDataIn[elementName].isMousemoveActive = false;
+				carouselDataIn[elementName].mouseStartX = pointerEventToXY(e).x;
+				carousel.style.transition = "none";
+			});
+
+
+			addListenerMulti(carousel, 'mouseleave touchcancel', function (e) {
+				carouselDataIn[elementName].isMousedownActive = false;
+				carousel.style.transition = "transform .5s cubic-bezier(.25, .46, .45, .94)";
+			});
+
+
+			addListenerMulti(carousel, 'mouseup touchend', function (e) {
+				carouselDataIn[elementName].isMousedownActive = false;
+
+				if (carouselDataIn[elementName].isMousemoveActive) {
+					carousel.addEventListener("click", preventClickOnDrag);
+				} else {
+					carousel.removeEventListener("click", preventClickOnDrag);
+				}
+
+				carouselDataIn[elementName].isMousemoveActive = false;
+				carousel.style.transition = "transform .5s cubic-bezier(.25, .46, .45, .94)";
+			});
+
+			addListenerMulti(carousel, 'mousemove touchmove', function (e) {
+				if (!carouselDataIn[elementName].isMousedownActive) {
+					carouselDataIn[elementName].isMousemoveActive = false;
+					carousel.removeEventListener("click", preventClickOnDrag);
+					return;
+				}
+
+				if (carouselDataIn[elementName].isMousedownActive) {
+					e.preventDefault();
+
+					let a = carouselDataIn[elementName].oneLenghtOfSlider;
+					let b = carouselDataIn[elementName].oneFrameDisplayed;
+					let c = carouselDataIn[elementName].translationX;
+					let t = 0;
+					carouselDataIn[elementName].boundRight = false;
+					carouselDataIn[elementName].boundLeft = false;
+
+					carouselDataIn[elementName].isMousemoveActive = true;
+					t = ((pointerEventToXY(e).x - carouselDataIn[elementName].mouseStartX) * 1) + c;
+
+					// left bound
+					if (t > 0 ) {
+						t = 0;
+						carouselDataIn[elementName].boundLeft = true;
+					}
+
+					//right bound
+					if (t < -a + b) {
+						t = -a + b;
+						carouselDataIn[elementName].boundRight = true;
+					}
+
+					carouselDataIn[elementName].translationX = t;
+					carousel.style.transform = "translateX(" + t + "px)";
+					carouselDataIn[elementName].mouseStartX = pointerEventToXY(e).x;
+					stateArrows();
+				}
 			});
 		}
 });

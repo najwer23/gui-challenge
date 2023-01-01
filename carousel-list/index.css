@@ -77,34 +77,8 @@ body {
 	cursor: pointer;
 }
 
-.carousel-progress-bar {
-	display: flex;
-	margin-top: 10px;
-}
-
-.carousel-progress-bar-item {
-	width: 30px;
-	height: 15px;
-	margin-right: 5px;
-	background-color: blanchedalmond;
-	border-radius: 10px;
-	cursor: pointer;
-}
-
-.carousel-progress-bar-item.active {
-	background-color: goldenrod;
-}
-
-div.carousel-progress-bar-item:last-of-type {
-	margin-right: 0;
-}
-
 
 @media only screen and (max-width: 600px) {
-	.carousel-container {
-		width: 90%
-	}
-
 	.carousel-arrow {
 		display: none;
 	}
