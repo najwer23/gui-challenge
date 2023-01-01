@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+
+<html lang="pl">
+
+<head>
+	<meta charset="utf-8">
+	<title>Video Player</title>
+	<meta name="description" content="Video player">
+	<meta name="author" content="Mariusz Najwer">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<link href="FA/css/all.css" rel="stylesheet">
+
+	<link href="index.css" rel="stylesheet">
+	<script src="index.js"></script>
+</head>
+
+<body>
+
+	<main>
+		<div id="videoDanceAtBarcelona" class="videoContainer">
+			<div class="videoWrapper">
+				<video class="video videoScene">
+					<source src="Video/dance.mp4" type="video/mp4">
+					<p>Your browser doesn't support HTML5 video</p>
+				</video>
+				<div class="videoControls">
+					<div class="videoBarWrapper">
+						<input class="seekBar videoBar" type="range" value="0">
+					</div>
+					<div class="videoMenu">
+						<div class="wrapperVideoElement">
+							<button class="play videoButton"><i class="fas fa-play"></i></button>
+							<button class="pause videoButton hide"><i class="fas fa-pause"></i></button>
+						</div>
+						<div class="wrapperVideoElement">
+							<button class="soundOn videoButton"><i class="fas fa-volume-up"></i></button>
+							<button class="soundOff videoButton hide"><i class="fas fa-volume-off"></i></button>
+						</div>
+						<div class="wrapperVideoElement">
+							<div class="videoTime">00:00:00 / 00:00:00</div>
+						</div>
+						<div class="wrapperVideoElement">
+							<button class="fullScreenOn videoButton"><i class="fas fa-expand"></i></button>
+							<button class="fullScreenOff videoButton hide"><i class="fas fa-compress"></i></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+</body>
+
+</html>
+
+
+
+
+
+
+
