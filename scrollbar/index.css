@@ -1,0 +1,41 @@
+.container {
+			width: calc(50% - 15px);
+			height: 400px;
+			margin: auto;
+		}
+
+
+
+
+
+		.custom-scrollbar {
+			overflow-y: scroll;
+			position: relative;
+			padding-right: 15px;
+
+			-ms-overflow-style: none;
+			overflow: -moz-scrollbars-none;
+			scrollbar-width: none;
+		}
+
+		.custom-scrollbar::-webkit-scrollbar {
+			-webkit-appearance: none !important;
+			width: 0 !important;
+			height: 0 !important;
+			display: none;
+		}
+
+		.custom-scrollbar-scroll {
+			width: 10px;
+			background-color: beige;
+			position: absolute;
+			top: 0;
+			right: 0;
+		}
+
+		.custom-scrollbar-scroll-thumb {
+			width: inherit;
+			background-color: purple;
+			position: fixed;
+			border-radius: 20px;
+		}
