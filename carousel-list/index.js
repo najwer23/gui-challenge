@@ -49,8 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
 			const carousel = document.querySelector(elementName);
 			const carouselContainer = carousel.parentNode;
 
-			//setInterval(nextPicture, 5000);
-
 			carouselContainer.addEventListener("click", function (e) {
 				if (e.target.closest(".carousel-arrow.right")) {
 					nextPicture();
@@ -67,15 +65,16 @@ document.addEventListener("DOMContentLoaded", () => {
 				let d = carouselDataIn[elementName].oneFrame;
 				let t = 0;
 
+				// translation left
 				t = c + b;
 
-				// wyrównaj do obiektu
+				// align to next object
 				let h = b % d;
 				t = t - h;
 
-				// jesli translacja wieksza niz lewa strona to przesun na sam poczatek
-				if (t>0) {
-					t=0;
+				// if the translation is bigger than the start, move it to the beginning
+				if (t > 0) {
+					t = 0;
 				}
 
 				carousel.style.transform = "translateX(" + t + "px)";
@@ -89,16 +88,16 @@ document.addEventListener("DOMContentLoaded", () => {
 				let d = carouselDataIn[elementName].oneFrame;
 				let t = 0;
 
-				// standardowa translacja
-				t = (c -b);
+				// translation right
+				t = c - b;
 
-				// wyrównaj do obiektu
+				// align to next object
 				let h = b % d;
 				t = t + h;
 
-				// sprawdz czy przesuniecie jest mozliwe. przesun maksymalnie do ostatniego obiektu
+				// check if the move is possible. move up to the last object
 				if (-b + c < -a + b) {
-					t = -a + b
+					t = -a + b;
 				}
 
 				carousel.style.transform = "translateX(" + t + "px)";
@@ -113,70 +112,5 @@ document.addEventListener("DOMContentLoaded", () => {
 			window.addEventListener("resize", function (event) {
 				calculateWidthForCarousel(elementName);
 			});
-
-
-
-
-			var THRESHOLD = 15;
-			var x = (y = x1 = y1 = 0);
-			var recordedTime = new Date().getTime();
-			setSwipesEvent(carousel);
-
-			function setSwipesEvent(element) {
-				element.addEventListener("touchstart", function (e) {
-					50 < new Date().getTime() - recordedTime && ((x = parseInt(e.changedTouches[0].pageX, 10)),
-					(y = parseInt(e.changedTouches[0].pageY, 10)),
-					(recordedTime = new Date().getTime()));
-				}, { passive: true});
-
-				element.addEventListener("touchend", function (e) {
-					x1 = x;
-					y1 = y;
-					x = parseInt(e.changedTouches[0].pageX, 10);
-					y = parseInt(e.changedTouches[0].pageY, 10);
-					recordedTime = new Date().getTime();
-					direct(element);
-				});
-
-				element.addEventListener("mousedown", function (e) {
-					50 < new Date().getTime() - recordedTime &&
-						((x = e.clientX),
-						(y = e.clientY),
-						(recordedTime = new Date().getTime()));
-				});
-
-				element.addEventListener("mouseup", function (e) {
-					x1 = x;
-					y1 = y;
-					x = e.clientX;
-					y = e.clientY;
-					recordedTime = new Date().getTime();
-					direct(element);
-				});
-			}
-
-			function direct(element) {
-				if (!( parseInt(Math.sqrt((x - x1) * (x - x1) + (y - y1) * (y - y1)), 10) < THRESHOLD)) {
-					if (x1 - x > Math.abs(y - y1)) {
-						//console.log("left")
-						nextPicture();
-					}
-					if (x - x1 > Math.abs(y - y1)) {
-						//console.log("right")
-						prevPicture();
-					}
-					if (y1 - y > Math.abs(x - x1)) {
-						//console.log("up")
-					}
-					if (y - y1 > Math.abs(x - x1)) {
-						//console.log("down")
-					}
-				} else {
-					if (element.id == "carousel1") {
-						//if click
-						console.log(1)
-					}
-				}
-			}
 		}
 });
