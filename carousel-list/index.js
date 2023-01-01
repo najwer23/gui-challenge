@@ -123,6 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
 					t = 0;
 				}
 
+				carousel.style.scrollBehavior = "smooth"
 				carousel.scrollLeft = -t;
 				carouselDataIn[elementName].translationX = t;
 				stateArrows()
@@ -151,6 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
 					t = -a + b;
 				}
 
+				carousel.style.scrollBehavior = "smooth"
 				carousel.scrollLeft = -t
 				carouselDataIn[elementName].translationX = t;
 				stateArrows()
@@ -176,6 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				if (!detectIfTranslationIsPossible()) {
 					return;
 				}
+				carousel.style.scrollBehavior = "initial";
 				carouselDataIn[elementName].translationX = -this.scrollLeft;
 				stateArrows();
 			});
@@ -186,6 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			});
 
 			addListenerMulti(carousel, 'mousedown', function (e) {
+				carousel.style.scrollBehavior = "initial";
 				carouselDataIn[elementName].isMousedownActive = true;
 				carouselDataIn[elementName].isMousemoveActive = false;
 				carouselDataIn[elementName].mouseStartX = pointerEventToXY(e).x;
@@ -193,10 +197,12 @@ document.addEventListener("DOMContentLoaded", () => {
 			});
 
 			addListenerMulti(carousel, 'mouseleave', function (e) {
+				carousel.style.scrollBehavior = "initial";
 				carouselDataIn[elementName].isMousedownActive = false;
 			});
 
 			addListenerMulti(carousel, 'mouseup', function (e) {
+				carousel.style.scrollBehavior = "initial";
 				carouselDataIn[elementName].isMousedownActive = false;
 
 				if (carouselDataIn[elementName].isMousemoveActive) {
@@ -209,6 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			});
 
 			addListenerMulti(carousel, 'mousemove', function (e) {
+				carousel.style.scrollBehavior = "initial";
 				if (!carouselDataIn[elementName].isMousedownActive) {
 					carouselDataIn[elementName].isMousemoveActive = false;
 					carousel.removeEventListener("click", preventClickOnDrag);
