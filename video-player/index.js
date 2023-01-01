@@ -68,7 +68,16 @@ window.onload = function () {
 		}
 	});
 
+	seekBar.addEventListener("mousedown", function () {
+		stopVideo();
+	});
+
+	seekBar.addEventListener("mouseup", function () {
+		playVidoe();
+	});
+
 	seekBar.addEventListener("change", function () {
+		console.log(52)
 		let time = video.duration * (seekBar.value / 100);
 		video.currentTime = time;
 		inputRange.style.setProperty("--val", +inputRange.value);
