@@ -42,6 +42,12 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 
 		function addMouseEventsToSlider(elementName) {
+			const carousel = document.querySelector(elementName);
+			const carouselContainer = carousel.parentNode;
+			stateArrows();
+
+
+
 			const preventClickOnDrag = (e) => {
 				e.preventDefault();
 				e.stopImmediatePropagation();
@@ -58,9 +64,6 @@ document.addEventListener("DOMContentLoaded", () => {
 				}
 				return coordinates;
 			};
-
-			const carousel = document.querySelector(elementName);
-			const carouselContainer = carousel.parentNode;
 
 			carouselContainer.addEventListener("mousewheel", function (e) {
 				let a = carouselDataIn[elementName].oneLenghtOfSlider;
