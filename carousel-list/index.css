@@ -2,6 +2,11 @@ body {
 	background: grey;
 }
 
+.carousel-wrapper {
+	width: 100%;
+	overflow: scroll;
+}
+
 .carousel-container {
 	position: relative;
 	display: flex;
@@ -75,6 +80,28 @@ body {
 
 .carousel-item {
 	cursor: pointer;
+}
+
+.carousel-progress-bar {
+	display: flex;
+	margin-top: 10px;
+}
+
+.carousel-progress-bar-item {
+	width: 30px;
+	height: 15px;
+	margin-right: 5px;
+	background-color: blanchedalmond;
+	border-radius: 10px;
+	cursor: pointer;
+}
+
+.carousel-progress-bar-item.active {
+	background-color: goldenrod;
+}
+
+div.carousel-progress-bar-item:last-of-type {
+	margin-right: 0;
 }
 
 
