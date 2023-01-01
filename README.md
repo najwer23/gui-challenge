@@ -6,3 +6,6 @@
 
 3. Scrollbar
 	- https://najwer23.github.io/gui-challenge/scrollbar
+
+4. Masonry Grid
+	- https://najwer23.github.io/gui-challenge/masonry-grid/
