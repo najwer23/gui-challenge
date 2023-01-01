@@ -1,0 +1,33 @@
+*, *::before, *::after, ul, li, body, a {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style-type: none;
+}
+
+body {
+    font-family: 'Muli', sans-serif;
+    font-weight: normal;
+    font-size: 1.2rem;
+    background: white;
+}
+
+#container {
+    background:cadetblue;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    width: 80%;
+}
+
+#masonry div[id^="masonry-child"] {
+    background: green;
+    padding: 40px;
+}
+
+#masonry2 div[id^="masonry2-child"] {
+    background: green;
+    padding: 40px;
+}
+
