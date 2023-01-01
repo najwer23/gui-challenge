@@ -20,8 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 						oneLenghtOfSlider: 0,
 						oneFrame: 300, // width child
 						oneFrameDisplayed: 0,
-						boundLeft: false,
-						boundRight: false
+						hiddeArrowOnWidth: 600
 					},
 				};
 
@@ -40,10 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
 				x.style.width = carouselDataIn[elementName].oneFrame + "px";
 				carouselDataIn[elementName].oneLenghtOfSlider += carouselDataIn[elementName].oneFrame;
 			});
-
-			// init with start position
-			carousel.style.transform = "translateX(" + 0 + "px)";
-			carouselDataIn[elementName].translationX = 0;
 		}
 
 		function addMouseEventsToSlider(elementName) {
@@ -67,6 +62,29 @@ document.addEventListener("DOMContentLoaded", () => {
 			const carousel = document.querySelector(elementName);
 			const carouselContainer = carousel.parentNode;
 
+			carouselContainer.addEventListener("mousewheel", function (e) {
+				let a = carouselDataIn[elementName].oneLenghtOfSlider;
+				let b = carouselDataIn[elementName].oneFrameDisplayed;
+				let c = carouselDataIn[elementName].translationX;
+				let t = 0;
+
+				t = c + e.wheelDeltaX;
+
+				// left bound
+				if (t >= 0 ) {
+					t = 0;
+				}
+
+				//right bound
+				if (t <= -a + b) {
+					t = -a + b;
+				}
+
+				carouselDataIn[elementName].translationX = t;
+				carousel.style.transform = "translateX(" + t + "px)";
+				stateArrows();
+			});
+
 			carouselContainer.addEventListener("click", function (e) {
 				if (e.target.closest(".carousel-arrow.right")) {
 					nextPicture();
@@ -80,8 +98,27 @@ document.addEventListener("DOMContentLoaded", () => {
 				let AL = carouselContainer.querySelector(".carousel-arrow.left")
 				let AR = carouselContainer.querySelector(".carousel-arrow.right")
 
-				AL.style.display = carouselDataIn[elementName].boundLeft ? "none" : "block"
-				AR.style.display = carouselDataIn[elementName].boundRight ? "none" : "block"
+				if (window.innerWidth < carouselDataIn[elementName].hiddeArrowOnWidth) {
+					AL.style.display = "none"
+					AR.style.display = "none"
+					return ;
+				}
+
+				let a = carouselDataIn[elementName].oneLenghtOfSlider;
+				let b = carouselDataIn[elementName].oneFrameDisplayed;
+				let t = carouselDataIn[elementName].translationX;
+				AL.style.display = "block";
+				AR.style.display = "block";
+
+				// left bound
+				if (t >= 0) {
+					AL.style.display = "none";
+				}
+
+				// right bound
+				if ( t <= -a + b) {
+					AR.style.display = "none";
+				}
 			}
 
 			function prevPicture() {
@@ -89,8 +126,6 @@ document.addEventListener("DOMContentLoaded", () => {
 				let c = carouselDataIn[elementName].translationX;
 				let d = carouselDataIn[elementName].oneFrame;
 				let t = 0;
-				carouselDataIn[elementName].boundLeft = false;
-				carouselDataIn[elementName].boundRight = false;
 
 				// translation left
 				t = c + b;
@@ -102,7 +137,6 @@ document.addEventListener("DOMContentLoaded", () => {
 				// left bound
 				if (t >= 0) {
 					t = 0;
-					carouselDataIn[elementName].boundLeft = true;
 				}
 
 				carousel.style.transform = "translateX(" + t + "px)";
@@ -116,8 +150,6 @@ document.addEventListener("DOMContentLoaded", () => {
 				let c = carouselDataIn[elementName].translationX;
 				let d = carouselDataIn[elementName].oneFrame;
 				let t = 0;
-				carouselDataIn[elementName].boundRight = false;
-				carouselDataIn[elementName].boundLeft = false;
 
 				// translation right
 				t = c - b;
@@ -129,7 +161,6 @@ document.addEventListener("DOMContentLoaded", () => {
 				// right bound
 				if ( t < -a + b) {
 					t = -a + b;
-					carouselDataIn[elementName].boundRight = true;
 				}
 
 				carousel.style.transform = "translateX(" + t + "px)";
@@ -144,6 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 			window.addEventListener("resize", function (event) {
 				calculateWidthForCarousel(elementName);
+				stateArrows();
 			});
 
 			function addListenerMulti(el, s, fn) {
@@ -191,8 +223,6 @@ document.addEventListener("DOMContentLoaded", () => {
 					let b = carouselDataIn[elementName].oneFrameDisplayed;
 					let c = carouselDataIn[elementName].translationX;
 					let t = 0;
-					carouselDataIn[elementName].boundRight = false;
-					carouselDataIn[elementName].boundLeft = false;
 
 					carouselDataIn[elementName].isMousemoveActive = true;
 					t = ((pointerEventToXY(e).x - carouselDataIn[elementName].mouseStartX) * 1) + c;
@@ -200,13 +230,11 @@ document.addEventListener("DOMContentLoaded", () => {
 					// left bound
 					if (t > 0 ) {
 						t = 0;
-						carouselDataIn[elementName].boundLeft = true;
 					}
 
 					//right bound
 					if (t < -a + b) {
 						t = -a + b;
-						carouselDataIn[elementName].boundRight = true;
 					}
 
 					carouselDataIn[elementName].translationX = t;
