@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
 					return;
 				}
 
-				this.scrollLeft = -1
+				this.scrollLeft = 1;
 
 				let a = carouselDataIn[elementName].oneLenghtOfSlider;
 				let b = carouselDataIn[elementName].oneFrameDisplayed;
@@ -180,16 +180,9 @@ document.addEventListener("DOMContentLoaded", () => {
 					t = -a + b;
 				}
 
-
-
-				carouselContainer.scrollLeft = -t ;
-
 				carousel.style.transform = "translateX(" + t + "px)";
 				carouselDataIn[elementName].translationX = t;
 				stateArrows()
-
-
-					console.log(carouselContainer, t, carouselContainer.scrollLeft);
 			}
 
 
