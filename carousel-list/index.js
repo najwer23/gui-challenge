@@ -194,7 +194,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 			addListenerMulti(carousel, 'mouseleave touchcancel', function (e) {
 				carouselDataIn[elementName].isMousedownActive = false;
-				carousel.style.transition = "transform .5s cubic-bezier(.25, .46, .45, .94)";
 			});
 
 			addListenerMulti(carousel, 'mouseup touchend', function (e) {
@@ -207,7 +206,6 @@ document.addEventListener("DOMContentLoaded", () => {
 				}
 
 				carouselDataIn[elementName].isMousemoveActive = false;
-				carousel.style.transition = "transform .5s cubic-bezier(.25, .46, .45, .94)";
 			});
 
 			addListenerMulti(carousel, 'mousemove touchmove', function (e) {
