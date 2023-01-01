@@ -9,3 +9,6 @@
 
 4. Masonry Grid
 	- https://najwer23.github.io/gui-challenge/masonry-grid/
+
+5. Video Player
+	- https://najwer23.github.io/gui-challenge/video-player/
