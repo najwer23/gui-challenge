@@ -66,6 +66,10 @@ document.addEventListener("DOMContentLoaded", () => {
 			};
 
 			carouselContainer.addEventListener("mousewheel", function (e) {
+				if (!detectIfTranslationIsPossible()) {
+					return;
+				}
+
 				let a = carouselDataIn[elementName].oneLenghtOfSlider;
 				let b = carouselDataIn[elementName].oneFrameDisplayed;
 				let c = carouselDataIn[elementName].translationX;
@@ -125,6 +129,10 @@ document.addEventListener("DOMContentLoaded", () => {
 			}
 
 			function prevPicture() {
+				if (!detectIfTranslationIsPossible()) {
+					return;
+				}
+
 				let b = carouselDataIn[elementName].oneFrameDisplayed;
 				let c = carouselDataIn[elementName].translationX;
 				let d = carouselDataIn[elementName].oneFrame;
@@ -148,6 +156,10 @@ document.addEventListener("DOMContentLoaded", () => {
 			}
 
 			function nextPicture() {
+				if (!detectIfTranslationIsPossible()) {
+					return;
+				}
+
 				let a = carouselDataIn[elementName].oneLenghtOfSlider;
 				let b = carouselDataIn[elementName].oneFrameDisplayed;
 				let c = carouselDataIn[elementName].translationX;
@@ -171,6 +183,16 @@ document.addEventListener("DOMContentLoaded", () => {
 				stateArrows()
 			}
 
+			function addListenerMulti(el, s, fn) {
+				s.split(" ").forEach((e) => el.addEventListener(e, fn, false));
+			}
+
+			function detectIfTranslationIsPossible() {
+				let a = carouselDataIn[elementName].oneLenghtOfSlider;
+				let b = carouselDataIn[elementName].oneFrameDisplayed;
+				return a > b;
+			}
+
 			//firefox bug fix
 			carousel.querySelectorAll(".carousel-item").forEach((item) => {
 				item.addEventListener("mousedown", (e) => e.preventDefault());
@@ -181,10 +203,6 @@ document.addEventListener("DOMContentLoaded", () => {
 				stateArrows();
 			});
 
-			function addListenerMulti(el, s, fn) {
-				s.split(" ").forEach((e) => el.addEventListener(e, fn, false));
-			}
-
 			addListenerMulti(carousel, 'mousedown touchstart', function (e) {
 				carouselDataIn[elementName].isMousedownActive = true;
 				carouselDataIn[elementName].isMousemoveActive = false;
@@ -192,12 +210,10 @@ document.addEventListener("DOMContentLoaded", () => {
 				carousel.style.transition = "none";
 			});
 
-
 			addListenerMulti(carousel, 'mouseleave touchcancel', function (e) {
 				carouselDataIn[elementName].isMousedownActive = false;
 				carousel.style.transition = "transform .5s cubic-bezier(.25, .46, .45, .94)";
 			});
-
 
 			addListenerMulti(carousel, 'mouseup touchend', function (e) {
 				carouselDataIn[elementName].isMousedownActive = false;
@@ -216,6 +232,10 @@ document.addEventListener("DOMContentLoaded", () => {
 				if (!carouselDataIn[elementName].isMousedownActive) {
 					carouselDataIn[elementName].isMousemoveActive = false;
 					carousel.removeEventListener("click", preventClickOnDrag);
+					return;
+				}
+
+				if (!detectIfTranslationIsPossible()) {
 					return;
 				}
 
