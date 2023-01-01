@@ -65,35 +65,6 @@ document.addEventListener("DOMContentLoaded", () => {
 				return coordinates;
 			};
 
-			carouselContainer.addEventListener("wheel", function (e) {
-				if (!detectIfTranslationIsPossible()) {
-					return;
-				}
-
-				this.scrollLeft = 1;
-
-				let a = carouselDataIn[elementName].oneLenghtOfSlider;
-				let b = carouselDataIn[elementName].oneFrameDisplayed;
-				let c = carouselDataIn[elementName].translationX;
-				let t = 0;
-
-				t = c + e.wheelDeltaX;
-
-				// left bound
-				if (t >= 0 ) {
-					t = 0;
-				}
-
-				//right bound
-				if (t <= -a + b) {
-					t = -a + b;
-				}
-
-				carouselDataIn[elementName].translationX = t;
-				carousel.style.transform = "translateX(" + t + "px)";
-				stateArrows();
-			});
-
 			carouselContainer.addEventListener("click", function (e) {
 				if (e.target.closest(".carousel-arrow.right")) {
 					nextPicture();
@@ -152,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
 					t = 0;
 				}
 
-				carousel.style.transform = "translateX(" + t + "px)";
+				carousel.scrollLeft = -t;
 				carouselDataIn[elementName].translationX = t;
 				stateArrows()
 			}
@@ -180,7 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
 					t = -a + b;
 				}
 
-				carousel.style.transform = "translateX(" + t + "px)";
+				carousel.scrollLeft = -t
 				carouselDataIn[elementName].translationX = t;
 				stateArrows()
 			}
@@ -199,6 +170,14 @@ document.addEventListener("DOMContentLoaded", () => {
 			//firefox bug fix
 			carousel.querySelectorAll(".carousel-item").forEach((item) => {
 				item.addEventListener("mousedown", (e) => e.preventDefault());
+			});
+
+			carousel.addEventListener("scroll", function (e) {
+				if (!detectIfTranslationIsPossible()) {
+					return;
+				}
+				carouselDataIn[elementName].translationX = -this.scrollLeft;
+				stateArrows();
 			});
 
 			window.addEventListener("resize", function (event) {
@@ -263,8 +242,8 @@ document.addEventListener("DOMContentLoaded", () => {
 						t = -a + b;
 					}
 
+					carousel.scrollLeft = -t;
 					carouselDataIn[elementName].translationX = t;
-					carousel.style.transform = "translateX(" + t + "px)";
 					carouselDataIn[elementName].mouseStartX = pointerEventToXY(e).x;
 					stateArrows();
 				}
