@@ -76,10 +76,6 @@ document.addEventListener("DOMContentLoaded", () => {
 				}
 			});
 
-			carousel.addEventListener("scroll", function (e) {
-				console.log(12);
-			});
-
 			function stateArrows() {
 				let AL = carouselContainer.querySelector(".carousel-arrow.left")
 				let AR = carouselContainer.querySelector(".carousel-arrow.right")
