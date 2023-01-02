@@ -12,3 +12,6 @@
 
 5. Video Player
 	- https://najwer23.github.io/gui-challenge/video-player/
+
+6. Email HTML
+	- https://najwer23.github.io/gui-challenge/email-html/
