@@ -1,1 +1,1 @@
-https://najwer23.github.io/gui-challenge/video-player/
+[https://najwer23.github.io/gui-challenge/video-player/]([https://najwer23.github.io/gui-challenge/email-html/])
