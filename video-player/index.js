@@ -72,38 +72,47 @@ window.onload = function () {
 		stopVideo();
 	});
 
-	seekBar.addEventListener("mouseup", function () {
-		playVidoe();
-	});
+	var flagaVideoStop = false;
 
 	seekBar.addEventListener("change", function () {
-		console.log(52)
+		stopVideo();
+		console.log("change seekbar")
 		let time = video.duration * (seekBar.value / 100);
 		video.currentTime = time;
 		inputRange.style.setProperty("--val", +inputRange.value);
-		videoTime.innerHTML =
-			timeInHours(video.currentTime) + " / " + timeInHours(video.duration);
+		videoTime.innerHTML = timeInHours(video.currentTime) + " / " + timeInHours(video.duration);
+
+		setTimeout(function () {
+			playVidoe();
+		}, 500);
 	});
 
 	video.addEventListener("timeupdate", function () {
-		let value = (100 / video.duration) * video.currentTime;
-		seekBar.value = value;
-		inputRange.style.setProperty("--val", +inputRange.value);
-		videoTime.innerHTML =
-			timeInHours(video.currentTime) + " / " + timeInHours(video.duration);
-		if (video.currentTime == video.duration) {
-			playButton.style.display = "block";
-			pauseButton.style.display = "none";
+		if (flagaVideoStop) {
+			return;
 		}
+		if (!flagaVideoStop) {
+			let value = (100 / video.duration) * video.currentTime;
+			seekBar.value = value;
+			inputRange.style.setProperty("--val", +inputRange.value);
+			videoTime.innerHTML = timeInHours(video.currentTime) + " / " + timeInHours(video.duration);
+			if (video.currentTime == video.duration) {
+				playButton.style.display = "block";
+				pauseButton.style.display = "none";
+			}
+		}
+
 	});
 
 	function playVidoe() {
+		flagaVideoStop = false;
 		video.play();
 		playButton.style.display = "none";
 		pauseButton.style.display = "block";
 	}
 
 	function stopVideo() {
+		flagaVideoStop = true;
 		video.pause();
 		playButton.style.display = "block";
 		pauseButton.style.display = "none";
