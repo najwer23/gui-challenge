@@ -83,6 +83,7 @@
 
 @media only screen and (max-width: 600px) {
 	.slideshow-control {
-		display: none;
+		width: 30px;
+		height: 30px;
 	}
 }
