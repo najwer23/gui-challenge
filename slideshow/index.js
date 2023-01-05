@@ -80,8 +80,6 @@ document.addEventListener("DOMContentLoaded", () => {
 			}, { passive: true});
 
 			element.addEventListener("touchend", function (e) {
-				posFinal = slideshowSlides.offsetLeft;
-
 				x1 = x;
 				y1 = y;
 				x = parseInt(e.changedTouches[0].pageX, 10);
@@ -109,7 +107,6 @@ document.addEventListener("DOMContentLoaded", () => {
 				x = e.clientX;
 				y = e.clientY;
 				recordedTime = new Date().getTime();
-				posFinal = slideshowSlides.offsetLeft;
 
 				direct(element);
 			});
