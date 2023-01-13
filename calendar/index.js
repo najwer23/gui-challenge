@@ -22,7 +22,13 @@ document.addEventListener("DOMContentLoaded", () => {
 		containerHeader.className = "cal-header";
 		containerHeader.innerHTML = `
 			<div class="cal-arrow-left"><</div>
-			<div> ${calendar.datePicked.short} </div>
+				<div class="cal-current-date" >
+					<div class="cal-current-date-day"> ${addZero(calendar.datePicked.dayOfMonth)}</div>
+					<div> - </div>
+					<div class="cal-current-date-month"> ${addZero(calendar.datePicked.monthReal)} </div>
+					<div> - </div>
+					<div class="cal-current-date-year"> ${calendar.datePicked.year} </div>
+				</div>
 			<div class="cal-arrow-right">></div>
 		`;
 
@@ -88,22 +94,19 @@ document.addEventListener("DOMContentLoaded", () => {
 				e.target.classList.add("active");
 				calendar = updateCalendar(calendar, getStringFromDate(new Date(calendar.datePicked.year, calendar.datePicked.month, e.target.innerHTML)));
 				calendarElement.value = calendar.datePicked.short;
+				container.querySelector(".cal-current-date-day").innerHTML = addZero(calendar.datePicked.dayOfMonth)
+			}
+
+			if (e.target.className == "cal-current-date-month") {
+				console.log(1)
+			}
+
+			if (e.target.className == "cal-current-date-year") {
+				console.log(1)
 			}
 		})
 
 	}
-
-	document.querySelector(calendar.id).addEventListener("click", function (e) {
-
-	})
-	// carouselContainer.addEventListener("click", function (e) {
-	// 	if (e.target.closest(".carousel-arrow.right")) {
-	// 		nextPicture();
-	// 	}
-	// 	if (e.target.closest(".carousel-arrow.left")) {
-	// 		prevPicture();
-	// 	}
-	// });
 
 	function removeActiveClassFromChildren(container, name) {
 		let itemsWithActiveClass = container.querySelectorAll(name);
@@ -121,11 +124,15 @@ document.addEventListener("DOMContentLoaded", () => {
 		return date;
 	}
 
+	function addZero(d) {
+		return d<10 ? ("0"+d) : d
+	}
+
 	function getStringFromDate(d) {
 		let month = d.getMonth() + 1;
 		let day = d.getDate();
 		let year = d.getFullYear();
-		return `${day<10? "0"+day : day}-${month<10? "0"+month : month}-${year}`
+		return `${addZero(day)}-${addZero(month)}-${year}`;
 	}
 
 	function updateCalendar(obj, date) {
