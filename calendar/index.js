@@ -1,27 +1,36 @@
 document.addEventListener("DOMContentLoaded", () => {
 
 	const LANGUAGE = "en-En";
-	const WEEK_DAYS = getWeekDays("long");
-	const WEEK_DAYS_SHORT = getWeekDays("short");
-	const MONTHS = getMonths("long")
-	const MONTHS_SHORT = getMonths("short")
+	let calendar = updateCalendar("12-09-1995");
+	calendar = updateCalendar("11-03-1995");
+	console.log(calendar)
 
-	let date = setUpDateByStr("12-03-2022");
+	function updateCalendar(date) {
+		return {
+			datePicked: setUpDateByStr(date),
+			weekDaysName: getWeekDays("long"),
+			weekDaysNameShort: getWeekDays("short"),
+			monthsName: getMonths("long"),
+			monthsNameShort: getMonths("short"),
+			yearMin: 1990,
+			yearMax: 2050,
+			daysInMonth: daysInMonth(date),
+		};
+	}
 
-	console.log(date);
-	console.log(WEEK_DAYS);
-	console.log(WEEK_DAYS_SHORT);
-	console.log(MONTHS)
-	console.log(MONTHS_SHORT)
+	function daysInMonth(s) {
+		let d = getDateFromString(s);
+		return new Date(d.getFullYear(), d.getMonth()+1, 0).getDate();
+	}
+
+	function getDateFromString(s) {
+		let p = s.split("-");
+		return new Date( p[2], p[1] - 1, p[0]);
+	}
 
 	// dd-mm-yyyy
 	function setUpDateByStr(s) {
-		let p = s.split("-")
-		let day = p[0];
-		let month = p[1];
-		let year = p[2]
-
-		let d = new Date(year,month-1,day)
+		let d = getDateFromString(s)
 
 		return {
 			dateObj: d,
