@@ -1,21 +1,37 @@
 document.addEventListener("DOMContentLoaded", () => {
 
 	const LANGUAGE = "en-En";
-	let calendar = updateCalendar("12-09-1995");
-	calendar = updateCalendar("11-03-1995");
+	let calendar = {
+		id: "#cal1",
+		yearMin: 1990,
+		yearMax: 2050,
+	}
+	calendar = updateCalendar(calendar, getStringFromDate(new Date()));
+
 	console.log(calendar)
 
-	function updateCalendar(date) {
-		return {
+
+
+
+
+
+
+	function getStringFromDate(d) {
+		let month = d.getMonth() + 1;
+		let day = d.getDate();
+		let year = d.getFullYear();
+		return `${day<10? "0"+day : day}-${month<10? "0"+month : month}-${year}`
+	}
+
+	function updateCalendar(obj, date) {
+		return {...obj, ...{
 			datePicked: setUpDateByStr(date),
 			weekDaysName: getWeekDays("long"),
 			weekDaysNameShort: getWeekDays("short"),
 			monthsName: getMonths("long"),
 			monthsNameShort: getMonths("short"),
-			yearMin: 1990,
-			yearMax: 2050,
 			daysInMonth: daysInMonth(date),
-		};
+		}};
 	}
 
 	function daysInMonth(s) {
