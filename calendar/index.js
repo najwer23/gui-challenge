@@ -6,17 +6,16 @@ document.addEventListener("DOMContentLoaded", () => {
 	const MONTHS = getMonths("long")
 	const MONTHS_SHORT = getMonths("short")
 
-	var cal = setUpCalByStr("12-03-2022");
+	let date = setUpDateByStr("12-03-2022");
 
-	console.log(cal);
+	console.log(date);
 	console.log(WEEK_DAYS);
 	console.log(WEEK_DAYS_SHORT);
 	console.log(MONTHS)
 	console.log(MONTHS_SHORT)
 
-
 	// dd-mm-yyyy
-	function setUpCalByStr(s) {
+	function setUpDateByStr(s) {
 		let p = s.split("-")
 		let day = p[0];
 		let month = p[1];
@@ -25,15 +24,19 @@ document.addEventListener("DOMContentLoaded", () => {
 		let d = new Date(year,month-1,day)
 
 		return {
+			dateObj: d,
 			short: s,
 			month: d.getMonth(),
 			monthReal: d.getMonth() + 1,
 			monthName: d.toLocaleDateString(LANGUAGE, { month: "long" }),
+			monthNameShort: d.toLocaleDateString(LANGUAGE, { month: "short" }),
 			year: d.getFullYear(),
 			ms: d.getTime(),
 			dayOfMonth: d.getDate(),
 			dayOfWeekNumber: d.getDay(),
 			dayOfWeekName: d.toLocaleDateString(LANGUAGE, { weekday: "long" }),
+			dayOfWeekNameShort: d.toLocaleDateString(LANGUAGE, { weekday: "short" }),
+			timeZone: d.getTimezoneOffset(),
 		};
 	}
 
