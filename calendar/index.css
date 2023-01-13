@@ -9,9 +9,16 @@
 	justify-content: space-between;
 }
 
+.cal-months,
 .cal-days {
 	display: flex;
 	flex-wrap: wrap;
+}
+
+.cal-month {
+	width: calc(100% / 4);
+	display: flex;
+	justify-content: center;
 }
 
 .cal-day {
