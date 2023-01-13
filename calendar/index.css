@@ -3,3 +3,29 @@
 	flex-direction: column;
 	width: 300px;
 }
+
+.cal-header {
+	display: flex;
+	justify-content: space-between;
+}
+
+.cal-days {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.cal-day {
+	width: calc(100% / 7);
+	display: flex;
+	justify-content: center;
+}
+
+.cal-day-number {
+	width: calc(100% / 7);
+	display: flex;
+	justify-content: center;
+}
+
+.cal-day-number.active {
+	background-color: red;
+}
