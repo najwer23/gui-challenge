@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 
 	calendar = updateCalendar(calendar, getStringFromDate(new Date()));
-	//calendar = updateCalendar(calendar, "13-02-2023");
 
 	document.querySelector(calendar.id).addEventListener("click", function(e) {
 		if (this.classList.contains("active")) {
@@ -28,6 +27,15 @@ document.addEventListener("DOMContentLoaded", () => {
 			this.classList.add("active");
 		}
 	})
+
+	document.addEventListener("click", function (e) {
+    if(!(e.target.closest(".cal-container") || e.target.closest(calendar.id))) {
+			if (document.querySelector(".cal-container")) {
+				document.querySelector(".cal-container").remove();
+				document.querySelector(calendar.id).classList.remove("active");
+			}
+		}
+	});
 
 	console.log(calendar)
 
@@ -98,7 +106,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		calendarElement.parentNode.append(container);
 
 		container.addEventListener("click", function (e) {
-
 			// click on arrow left
 			if (e.target.classList.contains("cal-arrow-left")) {
 				container.remove();
