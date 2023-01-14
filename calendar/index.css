@@ -51,6 +51,12 @@
 	background-color: red;
 }
 
+.cal-year.blocked,
+.cal-month.blocked,
+.cal-day-number.blocked {
+	background-color: orange;
+}
+
 .cal-current-date {
 	display: flex;
 }

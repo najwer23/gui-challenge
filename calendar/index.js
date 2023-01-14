@@ -3,11 +3,21 @@ document.addEventListener("DOMContentLoaded", () => {
 	const LANGUAGE = "en-En";
 	let calendar = {
 		id: "#cal1",
-		yearMin: 1990,
-		yearMax: 2050,
+		blockRange: [
+			"1-01-50;1-01-1900",
+			"1-01-2050;1-01-9999"
+		],
+		blockDate: [
+			"12-03-2023",
+			"15-03-2023",
+			"13-02-2023",
+			"14-02-2023",
+			"15-02-2023"
+		]
 	}
+
 	// calendar = updateCalendar(calendar, getStringFromDate(new Date()));
-	calendar = updateCalendar(calendar, "11-02-2023");
+	calendar = updateCalendar(calendar, "13-02-2023");
 
 	document.querySelector(calendar.id).addEventListener("click", function(e) {
 		if (this.classList.contains("active")) {
@@ -20,6 +30,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	})
 
 	console.log(calendar)
+
+
+
+
+
+
 
 	function createDropdownCalendar(calendar, isClick) {
 		let calendarElement = document.querySelector(calendar.id);
@@ -54,26 +70,27 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 
 		let startDay = getDateFromString("01-"+ calendar.datePicked.monthReal + "-" + calendar.datePicked.year).getDay();
+		let typeClass = "";
+		let typeValue = "";
+
 		for (let i = 1; i <= calendar.daysInMonth+startDay; i++) {
-
 			if (i<=startDay) {
-				containerDays.innerHTML += `
-					<div class="cal-day-number blank"></div>
-				`;
+				typeValue = "";
+				typeClass = "blank";
+			} else if (dateIsBlocked(calendar, calendar.datePicked.year, calendar.datePicked.monthReal, i-startDay)) {
+				typeValue = i - startDay;
+				typeClass = "blocked";
+			} else if (i == (calendar.datePicked.dayOfMonth + startDay)) {
+				typeValue = i - startDay;
+				typeClass = "active";
+			} else if (i>startDay) {
+		 		typeValue = i - startDay;
+				typeClass = "";
 			}
 
-			if (i == (calendar.datePicked.dayOfMonth + startDay)) {
-				containerDays.innerHTML += `
-					<div class="cal-day-number active"> ${[i - startDay]} </div>
-				`;
-				continue;
-			}
-
-			if (i>startDay) {
-				containerDays.innerHTML += `
-					<div class="cal-day-number"> ${[i-startDay]} </div>
-				`;
-			}
+			containerDays.innerHTML += `
+				<div class="cal-day-number ${typeClass}">${typeValue}</div>
+			`;
 		}
 
 		container.append(containerHeader)
@@ -100,6 +117,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 			// click on day
 			if (e.target.classList.contains("cal-day-number")) {
+				if (e.target.classList.contains("blocked")) {
+					return;
+				}
+
 				removeActiveClassFromChildren(this, ".cal-day-number");
 				e.target.classList.add("active");
 				calendar = updateCalendar(calendar, getStringFromDate(new Date(calendar.datePicked.year, calendar.datePicked.month, e.target.innerHTML)));
@@ -115,6 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				let containerMonths = document.createElement("div");
 				containerMonths.className = "cal-months";
 
+				///
 				for (let i=0; i<calendar.monthsNameShort.length; i++ ) {
 					containerMonths.innerHTML += `
 						<div class="cal-month ${i == calendar.datePicked.month ? "active": ""}" value=${i}> ${calendar.monthsNameShort[i]} </div>
@@ -138,7 +160,6 @@ document.addEventListener("DOMContentLoaded", () => {
 			}
 		})
 	}
-
 
 	function createCalendarFullOfYears(oldContainer, calendar) {
 		oldContainer.remove();
@@ -222,9 +243,44 @@ document.addEventListener("DOMContentLoaded", () => {
 		return `${addZero(day)}-${addZero(month)}-${year}`;
 	}
 
+	function dateIsBlocked(calendar, year, month, day) {
+		let arr = calendar.blockDate;
+		let dateTest = addZero(day) + "-" + addZero(month) + "-" + year;
+
+		return arr.includes(dateTest);
+	}
+
+	function getNextFreeDateToPick(calendar, date) {
+		let i = setUpDateByStr(date).dayOfMonth;
+
+		//search up
+		while (dateIsBlocked(calendar, setUpDateByStr(date).year, setUpDateByStr(date).monthReal, i)) {
+			i++;
+			if (i==500) {
+				break;
+			}
+		}
+
+		//search down
+		if (i==500) {
+			i = setUpDateByStr(date).dayOfMonth;
+			while (dateIsBlocked(calendar, setUpDateByStr(date).year, setUpDateByStr(date).monthReal, i)) {
+				i--;
+				if (i==-500) {
+					break;
+				}
+			}
+		}
+
+		return getStringFromDate(getDateFromString( i + "-" + setUpDateByStr(date).monthReal + "-" + setUpDateByStr(date).year));
+	}
 
 
 	function updateCalendar(obj, date) {
+		if (dateIsBlocked(obj, setUpDateByStr(date).year, setUpDateByStr(date).monthReal, setUpDateByStr(date).dayOfMonth)) {
+			date = getNextFreeDateToPick(obj, date)
+		}
+
 		document.querySelector(obj.id).value = setUpDateByStr(date).short;
 
 		return {...obj, ...{
@@ -286,6 +342,26 @@ document.addEventListener("DOMContentLoaded", () => {
 			months.push(d.toLocaleString(LANGUAGE, { month: type }));
 		}
 		return months;
+	}
+
+	function isEmpty(v) {
+		if (v === undefined) return true;
+
+		if (
+			typeof v == "function" ||
+			typeof v == "number" ||
+			typeof v == "boolean" ||
+			Object.prototype.toString.call(v) === "[object Date]"
+		)
+			return false;
+
+		if (v == null || v.length === 0) return true;
+
+		if (typeof v == "object") {
+			return Object.keys(v).length < 1;
+		}
+
+		return false;
 	}
 });
 
