@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
 
 	const LANGUAGE = "en-En";
+
 	let calendar = {
 		id: "#cal1",
 		blockRange: [
@@ -16,34 +17,36 @@ document.addEventListener("DOMContentLoaded", () => {
 		]
 	}
 
-	calendar = updateCalendar(calendar, getStringFromDate(new Date()));
 
-	document.querySelector(calendar.id).addEventListener("click", function(e) {
-		if (this.classList.contains("active")) {
-			this.parentNode.querySelector(".cal-container").remove()
-			this.classList.remove("active");
-		} else {
-			createDropdownCalendar(calendar, true);
-			this.classList.add("active");
-		}
-	})
+	createCalendar(calendar);
 
-	document.addEventListener("click", function (e) {
-    if(!(e.target.closest(".cal-container") || e.target.closest(calendar.id))) {
-			if (document.querySelector(".cal-container")) {
-				document.querySelector(".cal-container").remove();
-				document.querySelector(calendar.id).classList.remove("active");
+
+
+
+	function createCalendar(calendar) {
+		calendar = updateCalendar(calendar, getStringFromDate(new Date()));
+
+		document.querySelector(calendar.id).addEventListener("click", function (e) {
+			if (this.classList.contains("active")) {
+				this.parentNode.querySelector(".cal-container").remove();
+				this.classList.remove("active");
+			} else {
+				createDropdownCalendar(calendar, true);
+				this.classList.add("active");
 			}
-		}
-	});
+		});
 
-	console.log(calendar)
-
-
-
-
-
-
+		document.addEventListener("click", function (e) {
+			if (
+				!(e.target.closest(".cal-container") || e.target.closest(calendar.id))
+			) {
+				if (document.querySelector(".cal-container")) {
+					document.querySelector(".cal-container").remove();
+					document.querySelector(calendar.id).classList.remove("active");
+				}
+			}
+		});
+	}
 
 	function createDropdownCalendar(calendar, isClick) {
 		let calendarElement = document.querySelector(calendar.id);
