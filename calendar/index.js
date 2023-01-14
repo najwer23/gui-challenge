@@ -4,8 +4,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	let calendar = {
 		id: "#cal1",
 		blockRange: [
-			"1-01-50;1-01-1900",
-			"1-01-2050;1-01-9999"
+			"01-01-2023;14-01-2023",
+			"01-01-2024;31-12-2024"
 		],
 		blockDate: [
 			"12-03-2023",
@@ -16,8 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
 		]
 	}
 
-	// calendar = updateCalendar(calendar, getStringFromDate(new Date()));
-	calendar = updateCalendar(calendar, "13-02-2023");
+	calendar = updateCalendar(calendar, getStringFromDate(new Date()));
+	//calendar = updateCalendar(calendar, "13-02-2023");
 
 	document.querySelector(calendar.id).addEventListener("click", function(e) {
 		if (this.classList.contains("active")) {
@@ -244,44 +244,33 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 
 	function dateIsBlocked(calendar, year, month, day) {
+
+		// check if specific date is blocked
 		let arr = calendar.blockDate;
-		let dateTest = addZero(day) + "-" + addZero(month) + "-" + year;
+		let dateTest = (new Date(year,month-1,day)).getTime();
+		let isBlocked = arr.map(x=>getDateFromString(x).getTime()).includes(dateTest);
+		if (isBlocked) return true;
 
-		return arr.includes(dateTest);
-	}
+		// check if range is blocked
+		arr = calendar.blockRange;
+		let s;
 
-	function getNextFreeDateToPick(calendar, date) {
-		let i = setUpDateByStr(date).dayOfMonth;
+		for(let i=0; i<arr.length; i++) {
+			s = arr[i].split(";");
 
-		//search up
-		while (dateIsBlocked(calendar, setUpDateByStr(date).year, setUpDateByStr(date).monthReal, i)) {
-			i++;
-			if (i==500) {
-				break;
+			if (( dateTest >= getDateFromString(s[0]).getTime()) && (dateTest <= getDateFromString(s[1]).getTime())) {
+				return true;
 			}
 		}
 
-		//search down
-		if (i==500) {
-			i = setUpDateByStr(date).dayOfMonth;
-			while (dateIsBlocked(calendar, setUpDateByStr(date).year, setUpDateByStr(date).monthReal, i)) {
-				i--;
-				if (i==-500) {
-					break;
-				}
-			}
-		}
-
-		return getStringFromDate(getDateFromString( i + "-" + setUpDateByStr(date).monthReal + "-" + setUpDateByStr(date).year));
+		return false;
 	}
 
 
 	function updateCalendar(obj, date) {
-		if (dateIsBlocked(obj, setUpDateByStr(date).year, setUpDateByStr(date).monthReal, setUpDateByStr(date).dayOfMonth)) {
-			date = getNextFreeDateToPick(obj, date)
+		if (!dateIsBlocked(obj, setUpDateByStr(date).year, setUpDateByStr(date).monthReal, setUpDateByStr(date).dayOfMonth)) {
+			document.querySelector(obj.id).value = setUpDateByStr(date).short;
 		}
-
-		document.querySelector(obj.id).value = setUpDateByStr(date).short;
 
 		return {...obj, ...{
 			datePicked: setUpDateByStr(date),
@@ -344,24 +333,5 @@ document.addEventListener("DOMContentLoaded", () => {
 		return months;
 	}
 
-	function isEmpty(v) {
-		if (v === undefined) return true;
-
-		if (
-			typeof v == "function" ||
-			typeof v == "number" ||
-			typeof v == "boolean" ||
-			Object.prototype.toString.call(v) === "[object Date]"
-		)
-			return false;
-
-		if (v == null || v.length === 0) return true;
-
-		if (typeof v == "object") {
-			return Object.keys(v).length < 1;
-		}
-
-		return false;
-	}
 });
 
