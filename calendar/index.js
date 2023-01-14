@@ -134,10 +134,52 @@ document.addEventListener("DOMContentLoaded", () => {
 			}
 
 			if (e.target.classList.contains("cal-current-date-year")) {
-				console.log(1)
+				createCalendarFullOfYears(container, calendar);
 			}
 		})
+	}
 
+
+	function createCalendarFullOfYears(oldContainer, calendar) {
+		oldContainer.remove();
+		let calendarElement = document.querySelector(calendar.id);
+		let container2 = document.createElement("div");
+		container2.className = "cal-container years";
+
+		let containerYears = document.createElement("div");
+		containerYears.className = "cal-years";
+
+		for (let i = calendar.datePicked.year-4; i<=calendar.datePicked.year+4; i++ ) {
+			containerYears.innerHTML += `
+				<div class="cal-year ${i == calendar.datePicked.year ? "active": ""}" value=${i}> ${i} </div>
+			`;
+		}
+
+		let containerArrowLeft = document.createElement("div");
+		containerArrowLeft.className = "cal-year-container-arrow-left";
+		containerArrowLeft.innerHTML += `
+			<div class="cal-year-arrow-left"> < </div>
+		`;
+
+		let containerArrowRight = document.createElement("div");
+		containerArrowRight.className = "cal-year-container-arrow-right";
+		containerArrowRight.innerHTML += `
+			<div class="cal-year-arrow-right"> > </div>
+		`;
+
+		container2.append(containerArrowLeft);
+		container2.append(containerYears);
+		container2.append(containerArrowRight);
+
+		calendarElement.parentNode.append(container2);
+
+		container2.addEventListener("click", function (e) {
+			if (e.target.classList.contains("cal-year")) {
+				container2.remove();
+				calendar = updateCalendar(calendar, getStringFromDate(new Date(e.target.getAttribute("value"), calendar.datePicked.month, calendar.datePicked.dayOfMonth)));
+				createDropdownCalendar(calendar);
+			}
+		})
 	}
 
 	function removeActiveClassFromChildren(container, name) {

@@ -9,14 +9,25 @@
 	justify-content: space-between;
 }
 
+.cal-years,
 .cal-months,
 .cal-days {
 	display: flex;
 	flex-wrap: wrap;
 }
 
+.cal-container.years {
+	display: flex;
+}
+
 .cal-month {
 	width: calc(100% / 4);
+	display: flex;
+	justify-content: center;
+}
+
+.cal-year {
+	width: calc(100% / 3);
 	display: flex;
 	justify-content: center;
 }
@@ -33,6 +44,7 @@
 	justify-content: center;
 }
 
+.cal-year.active,
 .cal-month.active,
 .cal-day-number.active {
 	background-color: red;
