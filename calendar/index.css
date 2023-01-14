@@ -14,6 +14,7 @@
 .cal-days {
 	display: flex;
 	flex-wrap: wrap;
+	width: 100%;
 }
 
 .cal-container.years {

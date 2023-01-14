@@ -179,6 +179,19 @@ document.addEventListener("DOMContentLoaded", () => {
 				calendar = updateCalendar(calendar, getStringFromDate(new Date(e.target.getAttribute("value"), calendar.datePicked.month, calendar.datePicked.dayOfMonth)));
 				createDropdownCalendar(calendar);
 			}
+
+			if (e.target.classList.contains("cal-year-arrow-right")) {
+				container2.remove();
+				calendar = updateCalendar(calendar, getStringFromDate(new Date( calendar.datePicked.year+9, calendar.datePicked.month, calendar.datePicked.dayOfMonth)));
+				createCalendarFullOfYears(container2, calendar);
+			}
+
+			if (e.target.classList.contains("cal-year-arrow-left")) {
+				container2.remove();
+				calendar = updateCalendar(calendar, getStringFromDate(new Date( calendar.datePicked.year-9, calendar.datePicked.month, calendar.datePicked.dayOfMonth)));
+				createCalendarFullOfYears(container2, calendar);
+			}
+
 		})
 	}
 
