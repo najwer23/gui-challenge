@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		id: "#cal1",
 		blockRange: [
 			"01-01-2023;14-01-2023",
-			"01-01-2024;31-12-2024"
+			// "01-01-2024;31-12-2024"
 		],
 		blockDate: [
 			"12-03-2023",
@@ -46,6 +46,8 @@ document.addEventListener("DOMContentLoaded", () => {
 				}
 			}
 		});
+
+		console.log(calendar)
 	}
 
 	function createDropdownCalendar(calendar, isClick) {
@@ -57,18 +59,18 @@ document.addEventListener("DOMContentLoaded", () => {
 			calendar = updateCalendar(calendar, calendarElement.value || calendar.datePicked.short);
 		}
 
+		console.log(calendar.datePicked.month);
+
 		let containerHeader = document.createElement("div");
 		containerHeader.className = "cal-header";
 		containerHeader.innerHTML = `
-			<div class="cal-arrow-left"><</div>
+			<div class="cal-arrow-left"></div>
 				<div class="cal-current-date" >
 					<div class="cal-current-date-day"> ${addZero(calendar.datePicked.dayOfMonth)}</div>
-					<div> - </div>
-					<div class="cal-current-date-month"> ${addZero(calendar.datePicked.monthReal)} </div>
-					<div> - </div>
+					<div class="cal-current-date-month"> ${calendar.monthsNameShort[calendar.datePicked.month]} </div>
 					<div class="cal-current-date-year"> ${calendar.datePicked.year} </div>
 				</div>
-			<div class="cal-arrow-right">></div>
+			<div class="cal-arrow-right"></div>
 		`;
 
 		let containerDays = document.createElement("div");
@@ -76,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 		for (let i=0; i<calendar.weekDaysNameShort.length; i++ ) {
 			containerDays.innerHTML += `
-				<div class="cal-day"> ${calendar.weekDaysNameShort[i]} </div>
+				<div class="cal-day ${i == 0 ? "sunday": ""}"> ${calendar.weekDaysNameShort[i]} </div>
 			`;
 		}
 
@@ -85,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		let typeValue = "";
 
 		for (let i = 1; i <= calendar.daysInMonth+startDay; i++) {
-			if (i<=startDay) {
+			if (i<startDay + 1) {
 				typeValue = "";
 				typeClass = "blank";
 			} else if (dateIsBlocked(calendar, calendar.datePicked.year, calendar.datePicked.monthReal, i-startDay)) {
@@ -93,14 +95,14 @@ document.addEventListener("DOMContentLoaded", () => {
 				typeClass = "blocked";
 			} else if (i == (calendar.datePicked.dayOfMonth + startDay)) {
 				typeValue = i - startDay;
-				typeClass = "active";
-			} else if (i>startDay) {
+				typeClass = "active clickable";
+			} else if (i>=startDay) {
 		 		typeValue = i - startDay;
-				typeClass = "";
+				typeClass = "clickable";
 			}
 
 			containerDays.innerHTML += `
-				<div class="cal-day-number ${typeClass}">${typeValue}</div>
+				<div class="cal-day-number-parent"><div class="cal-day-number ${typeClass}" value="${typeValue}">${typeValue}<div/></div>
 			`;
 		}
 
@@ -126,14 +128,14 @@ document.addEventListener("DOMContentLoaded", () => {
 			}
 
 			// click on day
-			if (e.target.classList.contains("cal-day-number")) {
+			if (e.target.classList.contains("cal-day-number") && e.target.classList.contains("clickable")) {
 				if (e.target.classList.contains("blocked")) {
 					return;
 				}
 
 				removeActiveClassFromChildren(this, ".cal-day-number");
 				e.target.classList.add("active");
-				calendar = updateCalendar(calendar, getStringFromDate(new Date(calendar.datePicked.year, calendar.datePicked.month, e.target.innerHTML)));
+				calendar = updateCalendar(calendar, getStringFromDate(new Date(calendar.datePicked.year, calendar.datePicked.month, e.target.getAttribute("value"))));
 				container.querySelector(".cal-current-date-day").innerHTML = addZero(calendar.datePicked.dayOfMonth)
 			}
 
@@ -149,7 +151,11 @@ document.addEventListener("DOMContentLoaded", () => {
 				///
 				for (let i=0; i<calendar.monthsNameShort.length; i++ ) {
 					containerMonths.innerHTML += `
-						<div class="cal-month ${i == calendar.datePicked.month ? "active": ""}" value=${i}> ${calendar.monthsNameShort[i]} </div>
+						<div class="cal-month-parent" >
+							<div value=${i} class="cal-month ${i == calendar.datePicked.month ? "active" : ""}">
+								${calendar.monthsNameShort[i]}
+							</div>
+						</div>
 					`;
 				}
 
@@ -182,20 +188,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
 		for (let i = calendar.datePicked.year-4; i<=calendar.datePicked.year+4; i++ ) {
 			containerYears.innerHTML += `
-				<div class="cal-year ${i == calendar.datePicked.year ? "active": ""}" value=${i}> ${i} </div>
+				<div class="cal-year-parent" >
+					<div value=${i} class="cal-year ${i == calendar.datePicked.year ? "active" : ""}">
+						${i}
+					</div>
+				</div>
 			`;
 		}
 
 		let containerArrowLeft = document.createElement("div");
 		containerArrowLeft.className = "cal-year-container-arrow-left";
 		containerArrowLeft.innerHTML += `
-			<div class="cal-year-arrow-left"> < </div>
+			<div class="cal-year-arrow-left"></div>
 		`;
 
 		let containerArrowRight = document.createElement("div");
 		containerArrowRight.className = "cal-year-container-arrow-right";
 		containerArrowRight.innerHTML += `
-			<div class="cal-year-arrow-right"> > </div>
+			<div class="cal-year-arrow-right"></div>
 		`;
 
 		container2.append(containerArrowLeft);
@@ -211,13 +221,13 @@ document.addEventListener("DOMContentLoaded", () => {
 				createDropdownCalendar(calendar);
 			}
 
-			if (e.target.classList.contains("cal-year-arrow-right")) {
+			if (e.target.classList.contains("cal-year-container-arrow-right")) {
 				container2.remove();
 				calendar = updateCalendar(calendar, getStringFromDate(new Date( calendar.datePicked.year+9, calendar.datePicked.month, calendar.datePicked.dayOfMonth)));
 				createCalendarFullOfYears(container2, calendar);
 			}
 
-			if (e.target.classList.contains("cal-year-arrow-left")) {
+			if (e.target.classList.contains("cal-year-container-arrow-left")) {
 				container2.remove();
 				calendar = updateCalendar(calendar, getStringFromDate(new Date( calendar.datePicked.year-9, calendar.datePicked.month, calendar.datePicked.dayOfMonth)));
 				createCalendarFullOfYears(container2, calendar);

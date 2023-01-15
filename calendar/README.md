@@ -1,1 +1,1 @@
-[https://najwer23.github.io/gui-challenge/slideshow/](https://najwer23.github.io/gui-challenge/slideshow/)
+[https://najwer23.github.io/gui-challenge/calendar/](https://najwer23.github.io/gui-challenge/calendar/)
