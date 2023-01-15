@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			}
 		});
 
-		console.log(calendar)
+		//console.log(calendar)
 	}
 
 	function createDropdownCalendar(calendar, isClick) {
@@ -56,8 +56,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		if (isClick) {
 			calendar = updateCalendar(calendar, calendarElement.value || calendar.datePicked.short);
 		}
-
-		console.log(calendar.datePicked.month);
 
 		let containerHeader = document.createElement("div");
 		containerHeader.className = "cal-header";
