@@ -37,9 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		});
 
 		document.addEventListener("click", function (e) {
-			if (
-				!(e.target.closest(".cal-container") || e.target.closest(calendar.id))
-			) {
+			if (!(e.target.closest(".cal-container") || e.target.closest(calendar.id))) {
 				if (document.querySelector(".cal-container")) {
 					document.querySelector(".cal-container").remove();
 					document.querySelector(calendar.id).classList.remove("active");
@@ -139,6 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				container.querySelector(".cal-current-date-day").innerHTML = addZero(calendar.datePicked.dayOfMonth)
 			}
 
+			// click on month
 			if (e.target.classList.contains("cal-current-date-month")) {
 				container.remove();
 				let calendarElement = document.querySelector(calendar.id);
@@ -148,7 +147,6 @@ document.addEventListener("DOMContentLoaded", () => {
 				let containerMonths = document.createElement("div");
 				containerMonths.className = "cal-months";
 
-				///
 				for (let i=0; i<calendar.monthsNameShort.length; i++ ) {
 					containerMonths.innerHTML += `
 						<div class="cal-month-parent" >
@@ -171,6 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				})
 			}
 
+			// click on year
 			if (e.target.classList.contains("cal-current-date-year")) {
 				createCalendarFullOfYears(container, calendar);
 			}

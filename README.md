@@ -18,3 +18,6 @@
 
 7. Slideshow
 	- [https://najwer23.github.io/gui-challenge/slideshow/](https://najwer23.github.io/gui-challenge/slideshow/)
+
+8. Calendar drop down
+	- [https://najwer23.github.io/gui-challenge/calendar/](https://najwer23.github.io/gui-challenge/calendar/)
